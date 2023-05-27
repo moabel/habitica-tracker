@@ -1,7 +1,7 @@
-import React, { useState, ChangeEvent } from "react";
-
-import "./App.css";
-import UserHistory from "./UserHistory";
+import { useState, ChangeEvent } from 'react';
+import Home from './components/Home';
+import UserHistory from "./components/UserHistory";
+import './App.css';
 
 export const DATE_KEY_FORMAT = "YYYYMMDD";
 
@@ -11,19 +11,14 @@ export enum AppState {
   ERROR,
 }
 
+
 function App() {
   const [userId, setUserId] = useState<string>("");
   const [userApiKey, setUserApiKey] = useState<string>("");
-  const [error, setError] = useState<Error>();
+  // const [error, setError] = useState<Error>();
   const [appState, setAppState] = useState<AppState>(
     AppState.PROMPT_FOR_USER_CREDS
   );
-
-  const setAppError = (error: Error) => {
-    setError(error);
-    setAppState(AppState.ERROR);
-  };
-
   const handleUserIdChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUserId(event.target.value);
   };
@@ -38,72 +33,24 @@ function App() {
   };
 
   if (
-    appState === AppState.PROMPT_FOR_USER_CREDS ||
-    appState === AppState.ERROR
+    (appState === AppState.PROMPT_FOR_USER_CREDS || appState === AppState.ERROR) &&
+    !localStorage.getItem("user-id")
   ) {
-    return (
-      <div className="App">
-        <h1>Habitica Tracker</h1>
-        {error && <div className="error">Error: {error.message}</div>}
-        <p>
-          This tool displays a history of your Habits, Dailies and Todos in
-          Habitica.
-        </p>
-        <p>
-          Your User ID and API key can be found on the{" "}
-          <a
-            href="https://habitica.com/user/settings/api"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Settings &gt; API
-          </a>{" "}
-          page in Habitica.
-        </p>
-        <form className="user-api-form">
-          <div className="label-container">
-            <div className="label">User ID</div>
-            <input
-              type="text"
-              className="user-id"
-              value={userId}
-              onChange={handleUserIdChange}
-            />
-          </div>
-          <div className="label-container">
-            <span className="label">API Key</span>
-            <input
-              type="password"
-              className="api-key"
-              value={userApiKey}
-              onChange={handleUserApiKeyChange}
-              minLength={36}
-            />
-          </div>
-          <div className="submit-wrapper">
-            <input type="submit" value="Fetch My Data" onClick={handleSubmit} />
-          </div>
-        </form>
-        <h2>Note</h2>
-        <ul>
-          <li>
-            Your user ID and API key will be sent to the Habitica servers and
-            nowhere else.
-          </li>
-          <li>
-            This app does not change your Habitica account data. It only fetches
-            and displays data.
-          </li>
-        </ul>
-      </div>
-    );
+    return <Home
+      handleUserIdChange={handleUserIdChange}
+      handleUserApiKeyChange={handleUserApiKeyChange}
+      handleSubmit={handleSubmit}
+      userId={userId}
+      userApiKey={userApiKey}
+    />
   } else {
     return (
-      <UserHistory
-        userId={userId}
-        userApiKey={userApiKey}
-        setError={setAppError}
-      />
+      <>
+        <UserHistory
+          userId={userId || localStorage.getItem("user-id") || ""}
+          userApiKey={userApiKey || localStorage.getItem("user-key") || ""}
+        />
+      </>
     );
   }
 }

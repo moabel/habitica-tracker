@@ -159,14 +159,19 @@ export default function UserHistory(props: UserHistoryProps) {
     return (
       <div className="App">
         <AppContext.Provider value={appContext}>
+          
           <AppControls
             numDaysToShow={numDaysToShow}
             setNumDaysToShow={setNumDaysToShow}
             toggleTaskIcons={() => setShowTaskIcons(!showTaskIcons)}
           />
+
           <HabitHistory data={habits} />
+          
           <DailyHistory data={dailys} />
+          
           <TodoHistory data={todos} />
+        
         </AppContext.Provider>
       </div>
     );
