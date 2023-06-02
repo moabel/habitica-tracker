@@ -86,11 +86,11 @@ export function Daily(props: { daily: Task; showNoHistory: boolean }) {
     .map((day) => day.format(DATE_KEY_FORMAT))
     .map((day) => ({
       day,
-      delta: historyMap.get(day)
+      delta: historyMap.get(day),
     }));
 
   if (
-    dailyDeltas.filter(({delta}) => delta !== undefined).length === 0 &&
+    dailyDeltas.filter(({ delta }) => delta !== undefined).length === 0 &&
     !props.showNoHistory
   ) {
     // Don't render the component if showNoHistory is off.
@@ -106,7 +106,7 @@ export function Daily(props: { daily: Task; showNoHistory: boolean }) {
           dangerouslySetInnerHTML={{ __html: md.render(text) }}
         />
       </td>
-      {dailyDeltas.map(({day, delta}) => (
+      {dailyDeltas.map(({ day, delta }) => (
         <DailyStatus key={day} delta={delta!} />
       ))}
     </tr>

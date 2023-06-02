@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import { Task } from "../HabiticaTypes";
 import { HabitsGroup } from "./HabitsGroup";
 
@@ -12,7 +12,7 @@ interface UserHistoryProps {
 export const AppContext = createContext({
   showTaskIcons: true,
   // dates: Array<Dayjs>(),
-  dates: 7,
+  numOfDays: 7,
   updateDate: (_newDates: number) => {},
   // cronIntervals: new IntervalTree(),
 });
@@ -32,7 +32,7 @@ export default function UserHistory(props: UserHistoryProps) {
 
   const appContext = {
     showTaskIcons: showTaskIcons,
-    dates: numDaysToShow,
+    numOfDays: numDaysToShow,
     updateDate: (value: number) => {
       if (numDaysToShow + value) {
         setNumDaysToShow((currentValue) => value + currentValue);
@@ -62,7 +62,7 @@ export default function UserHistory(props: UserHistoryProps) {
     fetchWithApiKey(HABITICA_API_URL + TASKS_PATH)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result.data);
+        // console.log(result.data);
         return result;
       })
       .then((result) => {
@@ -72,10 +72,26 @@ export default function UserHistory(props: UserHistoryProps) {
       });
     // .then(result => console.log(result))
   }, []); // DO NOT REMOVE the empty dependency array
+  // const context = useContext(AppContext);
 
   return (
     <div className="App">
       <AppContext.Provider value={appContext}>
+        <div>{/* {appContext.numOfDays} */}</div>
+        <div className="app-controls">
+          <div>
+            <button onClick={() => appContext.updateDate(-7)}>-1 week</button>/
+            <button onClick={() => appContext.updateDate(7)}> +1 week</button>
+          </div>
+          <div className="date-header">May 2023</div>
+          <div style={{ opacity: 0 }}>
+            <button onClick={() => appContext.updateDate(-7)}>-1 week</button>/
+            <button onClick={() => appContext.updateDate(7)}> +1 week</button>
+          </div>
+          {/* <span role="button" class="link" title="Show/Hide task icons">
+            Hide Task Icons
+          </span> */}
+        </div>
         <HabitsGroup itens={taskData} text="Habits"></HabitsGroup>
         <HabitsGroup itens={dailys} text="Dailys"></HabitsGroup>
         <HabitsGroup itens={todo} text="To Do"></HabitsGroup>
