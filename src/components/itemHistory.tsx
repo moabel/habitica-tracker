@@ -1,6 +1,5 @@
 // import { useState, useEffect } from "react";
 
-import dayjs from "dayjs";
 import { EMPTY, FAIL, OK } from "./Dots";
 // import { History } from "../HabiticaTypes";
 
@@ -18,8 +17,8 @@ export interface dailyProps {
 /> */
 }
 // const today = new Date().getDate();
-const today = dayjs(0).format("YYYYMMDD");
-const another = dayjs(1685490668797).format("YYYYMMDD");
+// const today = dayjs(0).format("YYYYMMDD");
+// const another = dayjs(1685490668797).format("YYYYMMDD");
 // console.log(today, another, "date");
 
 function renderDots(params: any, task?: any): JSX.Element {
